@@ -34,7 +34,7 @@ You can pass by config to tinker with the default settings. A full list of the d
 
 To launch the aws dashboard run the command :Aws
 
-The plugin expects to find the find aws cli tool installed and configured correctly on the machine, it currenlty doesn't provide any method for installing and authenticating with aws.
+The plugin expects to find the find aws cli tool installed and configured correctly on the machine, it currently doesn't provide any method for installing and authenticating with aws.
 
 The first buffer is the menu where a list of available aws services will be shown, preferred services can be set in config to appear on top.
 
