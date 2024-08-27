@@ -1,12 +1,12 @@
 local utils = require("nvimawscli.utils.buffer")
 local itertools = require("nvimawscli.utils.itertools")
 local config = require("nvimawscli.config")
-local bucket = require("nvimawscli.services.s3.bucket")
+local profile = require("nvimawscli.services.profiles.profile")
 
----@type S3Handler
-local command = require(config.commands .. ".s3")
+---@type ProfileHandler
+local command = require(config.commands .. ".profiles")
 
----@class S3
+---@class Profile
 local M = {}
 
 function M.show(split)
@@ -22,7 +22,7 @@ function M.show(split)
 end
 
 function M.load()
-	M.bufnr = utils.create_buffer("s3")
+	M.bufnr = utils.create_buffer("profiles")
 
 	vim.api.nvim_buf_set_keymap(M.bufnr, "n", "<CR>", "", {
 		callback = function()
@@ -31,13 +31,13 @@ function M.load()
 			end
 			local position = vim.api.nvim_win_get_cursor(M.winnr)
 
-			local bucket_name = utils.get_line(M.bufnr, position[1])
+			local profile_name = utils.get_line(M.bufnr, position[1])
 
-			if not bucket_name then
+			if not profile_name then
 				return
 			end
-			print("Bucket name: " .. bucket_name)
-			bucket.show(bucket_name, config.menu.split)
+			print("Profile name: " .. profile_name)
+			profile.show(profile_name, config.menu.split)
 			vim.api.nvim_win_set_width(M.winnr, config.menu.width)
 		end,
 	})
@@ -45,12 +45,16 @@ end
 
 function M.fetch()
 	M.ready = false
-	utils.write_lines(M.bufnr, { "Fetching buckets..." })
-	command.list_buckets(function(result, error)
+	utils.write_lines(M.bufnr, { "Fetching profiles..." })
+	command.list_profiles(function(result, error)
 		if error then
 			utils.write_lines_string(M.bufnr, error)
 		elseif result then
-			M.rows = vim.json.decode(result)
+			local result_table = {}
+			for s in result:gmatch("[^\r\n]+") do
+				table.insert(result_table, s)
+			end
+			M.rows = result_table
 			local allowed_positions = M.render(M.rows)
 			utils.set_allowed_positions(M.bufnr, allowed_positions)
 		else

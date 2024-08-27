@@ -8,7 +8,7 @@ M.launched = false
 function M.setup(c)
 	config.setup(c)
 
-	vim.api.nvim_create_user_command("Aws", function(options)
+	vim.api.nvim_create_user_command("Oren", function(options)
 		M.launch(#options.fargs > 0 and options.fargs[1] or nil)
 	end, {
 		nargs = "?",

@@ -8,6 +8,7 @@ local M = {
 	preferred_services = {
 		"ec2",
 		"s3",
+		"profiles",
 	},
 	all_services = {
 		"ec2",
@@ -17,6 +18,7 @@ local M = {
 		"rds",
 		"iam",
 		"vpc",
+		"change-profile",
 	},
 	menu = {
 		split = "vertical",
@@ -24,6 +26,14 @@ local M = {
 	},
 	details = {
 		split = "horizontal",
+	},
+	profiles = {
+		preferred_services = {
+			"change-profile",
+		},
+		all_services = {
+			"change-profile",
+		},
 	},
 	ec2 = {
 		preferred_services = {
